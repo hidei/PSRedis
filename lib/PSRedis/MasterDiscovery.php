@@ -156,7 +156,7 @@ class MasterDiscovery
     /**
      * @param callable $observer
      */
-    public function setBackoffObserver (callable $observer)
+    public function setBackoffObserver ($observer)
     {
         $this->backoffObserver = $observer;
     }
