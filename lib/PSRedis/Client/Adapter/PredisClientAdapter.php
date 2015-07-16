@@ -80,11 +80,11 @@ class PredisClientAdapter
 
     private function getPredisClientParameters()
     {
-        return array(
-            'scheme'    => 'tcp',
-            'host'      => $this->ipAddress,
-            'port'      => $this->port,
-        );
+    	return array_replace(array(
+    		'scheme' => 'tcp',
+    		'host'   => $this->ipAddress,
+    		'port'   => $this->port
+    	), $this->parameters);
     }
 
     /**

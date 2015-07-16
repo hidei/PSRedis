@@ -15,6 +15,8 @@ abstract class AbstractClientAdapter
 
     protected $port;
 
+    protected $parameters = array();
+
     protected $isConnected = false;
 
     public function setIpAddress($ipAddress)
@@ -27,8 +29,13 @@ abstract class AbstractClientAdapter
         $this->port = $port;
     }
 
+    public function setParameters(array $parameters)
+    {
+    	$this->parameters = $parameters;
+    }
+
     public function isConnected()
     {
         return $this->isConnected;
     }
-} 
+}

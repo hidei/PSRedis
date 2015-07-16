@@ -3,13 +3,8 @@
 namespace PSRedis;
 
 use PSRedis\Client\Adapter\Predis\PredisClientCreator;
-use PSRedis\Exception\InvalidProperty;
 use PSRedis\Client\Adapter\PredisClientAdapter;
 use PSRedis\Client\ClientAdapter;
-use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Constraints\Ip;
-use Symfony\Component\Validator\Constraints\Range;
-use Symfony\Component\Validator\Validation;
 
 /**
  * Class Client
@@ -30,6 +25,11 @@ class Client
      */
     private $port;
 
+    /**
+     * @var array
+     */
+    private $parameters;
+
     private $clientAdapter;
 
     const TYPE_SENTINEL = 'sentinel';
@@ -39,10 +39,16 @@ class Client
     const ROLE_MASTER   = 'master';
     const ROLE_SLAVE    = 'slave';
 
-    public function __construct($ipAddress, $port, ClientAdapter $uninitializedClientAdapter = null, $connectionType = self::TYPE_SENTINEL)
+    public function __construct(
+    	$ipAddress,
+    	$port,
+    	ClientAdapter $uninitializedClientAdapter = null,
+    	$connectionType = self::TYPE_SENTINEL,
+    	array $parameters = array())
     {
-        $this->ipAddress = $ipAddress;
-        $this->port = $port;
+        $this->ipAddress  = $ipAddress;
+        $this->port       = $port;
+        $this->parameters = $parameters;
 
         if (empty($uninitializedClientAdapter)) {
             $uninitializedClientAdapter = new PredisClientAdapter(new PredisClientCreator(), $connectionType);
@@ -54,6 +60,7 @@ class Client
     {
         $clientAdapter->setIpAddress($this->getIpAddress());
         $clientAdapter->setPort($this->getPort());
+        $clientAdapter->setParameters($this->getParameters());
 
         return $clientAdapter;
     }
@@ -72,6 +79,14 @@ class Client
     public function getPort()
     {
         return $this->port;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParameters()
+    {
+    	return $this->parameters;
     }
 
     public function connect()
@@ -128,4 +143,4 @@ class Client
     {
         return call_user_func_array(array($this->clientAdapter, $methodName), $methodParameters);
     }
-} 
+}
